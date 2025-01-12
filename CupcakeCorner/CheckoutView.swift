@@ -63,7 +63,7 @@ struct CheckoutView: View {
         let url = URL(string: "https://reqres.in/api/cupcakes")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.httpMethod = "POST"
+        request.httpMethod = "POST"
         
         do {
             let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
@@ -73,7 +73,7 @@ struct CheckoutView: View {
         } catch {
             print("Checkout failed: \(error.localizedDescription)")
             showingError = true
-            errorMessage = "Your order could not be filled due to: \(error.localizedDescription)"
+            errorMessage = "Your order could not be filled due to: \n\n \(error.localizedDescription)"
         }
     }
 }

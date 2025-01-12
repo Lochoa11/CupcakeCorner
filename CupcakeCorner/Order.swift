@@ -12,7 +12,7 @@ class Order: Codable {
     enum CodingKeys: String, CodingKey {
         case _type = "type"
         case _quantity = "quantity"
-        case _specialRequestEnabled = "spcialRequestEnabled"
+        case _specialRequestEnabled = "specialRequestEnabled"
         case _extraFrosting = "extraFrosting"
         case _addSprinkles = "addSprinkles"
         case _name = "name"
@@ -36,31 +36,29 @@ class Order: Codable {
     var extraFrosting = false
     var addSprinkles = false
     
-    var name = ""
+    var name = "" {
+        didSet {
+            UserDefaults.standard.set(name, forKey: "Name")
+        }
+    }
     var streetAddress = "" {
         didSet {
-            if let encoded = try? JSONEncoder().encode(streetAddress) {
-                UserDefaults.standard.set(encoded, forKey: "Address")
-            }
+            UserDefaults.standard.set(streetAddress, forKey: "Address")
         }
     }
     var city = "" {
         didSet {
-            if let encoded = try? JSONEncoder().encode(city) {
-                UserDefaults.standard.set(encoded, forKey: "City")
-            }
+            UserDefaults.standard.set(city, forKey: "City")
         }
     }
     var zip = "" {
         didSet {
-            if let encoded = try? JSONEncoder().encode(zip) {
-                UserDefaults.standard.set(encoded, forKey: "Zip")
-            }
+            UserDefaults.standard.set(zip, forKey: "Zip")
         }
     }
     
     var hasValidAddress: Bool {
-        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty {
+        if name.isReallyEmpty || streetAddress.isReallyEmpty || city.isReallyEmpty || zip.isReallyEmpty {
             return false
         }
         
@@ -88,20 +86,9 @@ class Order: Codable {
     }
     
     init() {
-        if let savedItem = UserDefaults.standard.data(forKey: "Address") {
-            if let decodedItem = try? JSONDecoder().decode(String.self, from: savedItem) {
-                streetAddress = decodedItem
-            }
-        }
-        if let savedItem = UserDefaults.standard.data(forKey: "City") {
-            if let decodedItem = try? JSONDecoder().decode(String.self, from: savedItem) {
-                city = decodedItem
-            }
-        }
-        if let savedItem = UserDefaults.standard.data(forKey: "Zip") {
-            if let decodedItem = try? JSONDecoder().decode(String.self, from: savedItem) {
-                zip = decodedItem
-            }
-        }
+        name = UserDefaults.standard.string(forKey: "Name") ?? ""
+        streetAddress = UserDefaults.standard.string(forKey: "Address") ?? ""
+        city = UserDefaults.standard.string(forKey: "City") ?? ""
+        zip = UserDefaults.standard.string(forKey: "Zip") ?? ""
     }
 }

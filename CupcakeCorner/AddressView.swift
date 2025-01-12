@@ -23,39 +23,10 @@ struct AddressView: View {
                     CheckoutView(order: order)
                 }
             }
-            .disabled(addressValidation())
+            .disabled(order.hasValidAddress == false)
         }
         .navigationTitle("Delivery details")
         .navigationBarTitleDisplayMode(.inline)        
-    }
-    
-    func addressValidation() -> Bool {
-        if order.hasValidAddress == false {
-            return true
-        }
-        
-        let checkName = order.name.trimmingCharacters(in: .whitespaces)
-        let checkStreetAddress = order.streetAddress.trimmingCharacters(in: .whitespaces)
-        let checkCity = order.city.trimmingCharacters(in: .whitespaces)
-        let checkZip = order.zip.trimmingCharacters(in: .whitespaces)
-        
-        if checkName == "" {
-            return true
-        }
-        
-        if checkStreetAddress == "" {
-            return true
-        }
-        
-        if checkCity == "" {
-            return true
-        }
-        
-        if checkZip == "" {
-            return true
-        }
-        
-        return false
     }
 }
 
