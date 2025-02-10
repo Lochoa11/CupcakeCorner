@@ -25,8 +25,10 @@ struct CheckoutView: View {
                         .scaledToFit()
                 } placeholder: {
                     ProgressView()
+                        
                 }
                 .frame(height: 233)
+                .accessibilityLabel("")
                 
                 Text("Your total is \(order.cost, format: .currency(code: "USD"))")
                     .font(.title)
@@ -68,6 +70,7 @@ struct CheckoutView: View {
         do {
             let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
             let decodedOrder = try JSONDecoder().decode(Order.self, from: data)
+            print(decodedOrder)
             confirmationMessage = "Your order for \(decodedOrder.quantity)x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
             showingConfirmation = true
         } catch {
